@@ -1,0 +1,8 @@
+{
+  "name": "Silla Vacía · Acompañamiento Terapéutico",
+  "description": "Un espacio para volverte a encontrar. Terapia gestáltica e integrativa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
