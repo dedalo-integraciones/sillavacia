@@ -67,22 +67,67 @@ import { PageFlip } from 'page-flip';
     window.requestAnimationFrame(updateNavbar);
   }
 
-  // Menú mobile
+  // Menú mobile optimizado y accesible
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
+  const backdrop = document.getElementById('navBackdrop');
+  const closeBtn = document.getElementById('navCloseBtn');
+
   if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
-      toggle.classList.toggle('active');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    const openMenu = () => {
+      links.classList.add('open');
+      toggle.classList.add('active');
+      toggle.setAttribute('aria-expanded', 'true');
+      if (backdrop) backdrop.classList.add('open');
+      document.body.classList.add('nav-open');
+    };
+
+    const closeMenu = () => {
+      links.classList.remove('open');
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.classList.remove('nav-open');
+    };
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (links.classList.contains('open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
     });
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        links.classList.remove('open');
-        toggle.classList.remove('active');
-        toggle.setAttribute('aria-expanded', 'false');
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeMenu();
       });
+    }
+
+    if (backdrop) {
+      backdrop.addEventListener('click', closeMenu);
+    }
+
+    // Cerrar al hacer clic en cualquier enlace
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeMenu);
     });
+
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && links.classList.contains('open')) {
+        closeMenu();
+      }
+    });
+
+    // Cerrar automáticamente si la ventana se agranda a tamaño desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024 && links.classList.contains('open')) {
+        closeMenu();
+      }
+    }, { passive: true });
   }
 
   // ============================================================
@@ -98,7 +143,11 @@ import { PageFlip } from 'page-flip';
   function initDesktopFlipbook() {
     if (!flipbookContainer) return;
 
-    if (window.innerWidth < 1024) {
+    const isLandscapeTablet = (window.innerWidth >= 768 && window.innerHeight >= 480 && window.matchMedia('(orientation: landscape)').matches);
+    const isDesktop = window.innerWidth >= 1024;
+    const shouldShowFlipbook = isDesktop || isLandscapeTablet;
+
+    if (!shouldShowFlipbook) {
       if (pageFlipInstance) {
         try {
           pageFlipInstance.destroy();
@@ -114,13 +163,17 @@ import { PageFlip } from 'page-flip';
       const pageElements = flipbookContainer.querySelectorAll('.flip-page');
       if (!pageElements.length) return;
 
+      const isCompactLandscape = isLandscapeTablet && window.innerHeight < 700;
+      const baseWidth = isCompactLandscape ? 360 : 440;
+      const baseHeight = isCompactLandscape ? 500 : 620;
+
       pageFlipInstance = new PageFlip(flipbookContainer, {
-        width: 440,
-        height: 620,
+        width: baseWidth,
+        height: baseHeight,
         size: 'stretch',
-        minWidth: 320,
+        minWidth: 260,
         maxWidth: 540,
-        minHeight: 450,
+        minHeight: 360,
         maxHeight: 760,
         maxShadowOpacity: 0.4,
         showCover: true,
@@ -206,6 +259,11 @@ import { PageFlip } from 'page-flip';
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(initDesktopFlipbook, 200);
+    }, { passive: true });
+
+    window.addEventListener('orientationchange', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(initDesktopFlipbook, 250);
     }, { passive: true });
   }
 

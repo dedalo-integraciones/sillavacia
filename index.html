@@ -63,12 +63,25 @@
         <span></span><span></span><span></span>
       </button>
 
+      <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+
       <nav class="nav-links" id="navLinks">
-        <a href="#hero">Inicio</a>
-        <a href="#acerca">Acerca de</a>
-        <a href="#programas">Programas</a>
-        <a href="#galeria">Galería</a>
-      <a href="#contacto" class="nav-cta">Escribinos</a>
+        <div class="nav-drawer-header">
+          <div class="drawer-brand">
+            <img src="public/logo-o.webp" alt="Silla Vacía" class="drawer-logo" />
+            <span>Silla Vacía</span>
+          </div>
+          <button class="nav-close-btn" id="navCloseBtn" aria-label="Cerrar menú">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="nav-links-body">
+          <a href="#hero">Inicio</a>
+          <a href="#acerca">Acerca de</a>
+          <a href="#programas">Programas</a>
+          <a href="#galeria">Galería</a>
+          <a href="#contacto" class="nav-cta">Escribinos</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -356,13 +369,6 @@
             <div class="flip-page page-cover page-cover-front" data-density="hard">
               <div class="page-inner">
                 <img src="src/assets/gallery/0.webp" alt="Portada de la galería de Silla Vacía" />
-                <div class="cover-overlay">
-                  <div class="cover-tag">Álbum Silla Vacía</div>
-                  <div class="cover-action-hint">
-                    <span>Hacé clic o arrastrá para hojear</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </div>
-                </div>
               </div>
             </div>
 
