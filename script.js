@@ -13,28 +13,33 @@ import { PageFlip } from 'page-flip';
 (function () {
   'use strict';
 
-  // Inicializar AOS tras el primer render para evitar reflow forzado
+  // Inicializar AOS con soporte completo de refresco dinámico
   const initAOS = () => {
     if (typeof AOS !== 'undefined') {
       AOS.init({
         duration: 900,
         easing: 'ease-out-cubic',
         once: true,
-        offset: 80,
-        disableMutationObserver: true,
+        offset: 50,
+        disableMutationObserver: false,
         debounceDelay: 50,
         throttleDelay: 99
       });
     }
   };
 
-  if (typeof window.requestIdleCallback === 'function') {
-    window.requestIdleCallback(initAOS, { timeout: 300 });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAOS);
   } else {
-    window.requestAnimationFrame(() => {
-      setTimeout(initAOS, 50);
-    });
+    initAOS();
   }
+
+  // Refrescar AOS cuando todas las imágenes y recursos terminen de renderizar
+  window.addEventListener('load', () => {
+    if (typeof AOS !== 'undefined') {
+      AOS.refresh();
+    }
+  });
 
   // Navbar scroll optimizado con requestAnimationFrame
   const navbar = document.getElementById('navbar');
@@ -181,6 +186,9 @@ import { PageFlip } from 'page-flip';
       }
 
       updateFlipUI(0);
+      if (typeof AOS !== 'undefined') {
+        setTimeout(() => AOS.refresh(), 100);
+      }
     } catch (err) {
       console.warn('FlipBook notice:', err);
     }
