@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://sillavacia.vercel.app/</loc>
+    <lastmod>2025-08-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://sillavacia.vercel.app/og-image.jpg</image:loc>
+      <image:title>Silla Vacía · Acompañamiento Terapéutico</image:title>
+      <image:caption>Un espacio para volverte a encontrar. Terapia gestáltica e integrativa con Estelle Darcy.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sillavacia.vercel.app/public/logo-o.webp</image:loc>
+      <image:title>Silla Vacía Logo</image:title>
+    </image:image>
+  </url>
+</urlset>
