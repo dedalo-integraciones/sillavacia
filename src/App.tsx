@@ -316,39 +316,35 @@ export default function App() {
       ============================================================ */}
       <section
         id="hero"
-        className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-28 pb-16 overflow-hidden bg-gradient-to-br from-[#FE8505]/15 via-[#FFEFD3] to-[#FFFDE1]"
+        className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-28 pb-16 overflow-hidden bg-[#FFFDE1]"
       >
         {/* Background Image Carousel Layer with Crossfade */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           {heroImages.map((img, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
-                idx === activeHeroBg ? 'opacity-30' : 'opacity-0'
-              }`}
+              className={`hero-bg-layer ${idx === activeHeroBg ? 'active' : ''}`}
               style={{ backgroundImage: `url(${img})` }}
             />
           ))}
-          {/* Subtle gradient scrim */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FFFDE1]/95 via-[#FFFDE1]/80 to-[#FFFDE1]/40" />
+          {/* Calibrated Gradient Overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(255,253,225,0.95) 0%, rgba(255,253,225,0.70) 45%, transparent 75%)',
+            }}
+          />
         </div>
 
-        {/* Ambient Decorative Orbs */}
+        {/* Ambient subtle glow only on extreme top-left corner */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
-          <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#FE8505]/20 blur-3xl animate-float" />
-          <div
-            className="absolute -bottom-20 -right-20 w-72 h-72 rounded-full bg-[#E52E01]/15 blur-3xl animate-float"
-            style={{ animationDelay: '2s' }}
-          />
-          <div
-            className="absolute top-1/3 right-1/4 w-60 h-60 rounded-full bg-[#FE8505]/15 blur-2xl animate-float"
-            style={{ animationDelay: '4s' }}
-          />
+          <div className="absolute -top-32 -left-32 w-72 h-72 rounded-full bg-[#FE8505]/10 blur-3xl animate-float" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-3xl">
+          <div className="max-w-2xl">
             <span className="inline-block text-xs md:text-sm font-semibold tracking-[0.25em] text-[#FE8505] uppercase mb-4 px-3.5 py-1.5 rounded-full bg-[#FE8505]/10 border border-[#FE8505]/20">
               ACOMPAÑAMIENTO TERAPÉUTICO
             </span>
@@ -358,7 +354,7 @@ export default function App() {
               <span className="text-[#FE8505] italic font-serif">encontrar</span>
             </h1>
 
-            <p className="text-lg sm:text-xl md:text-2xl font-light text-[#3a3a3a] leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl md:text-2xl font-light text-[#2b2b2b] leading-relaxed mb-8 max-w-xl">
               Acompañamiento con enfoque humano, integrador y orientado a tu bienestar real.
             </p>
 

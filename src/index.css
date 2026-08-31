@@ -56,6 +56,18 @@
   animation: floatAnimation 12s ease-in-out infinite;
 }
 
+/* Capas de fondo del hero (ciclo de imágenes) */
+.hero-bg-layer {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  background-repeat: no-repeat;
+}
+.hero-bg-layer.active {
+  opacity: 1;
+}
+
 /* Scroll Dot Animation */
 @keyframes scrollDot {
   0% { transform: translateY(0); opacity: 1; }
