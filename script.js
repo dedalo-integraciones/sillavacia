@@ -8,6 +8,7 @@ import '@fontsource/outfit/600.css';
 import '@fontsource/outfit/700.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { PageFlip } from 'page-flip';
 
 (function () {
   'use strict';
@@ -79,7 +80,128 @@ import 'aos/dist/aos.css';
     });
   }
 
-  // Carrusel Galería
+  // ============================================================
+  // FLIPBOOK 3D INTERACTIVO (DESKTOP >= 1024px)
+  // ============================================================
+  const flipbookContainer = document.getElementById('flipbookContainer');
+  const flipPrevBtn = document.getElementById('flipbookPrev');
+  const flipNextBtn = document.getElementById('flipbookNext');
+  const flipIndicator = document.getElementById('flipbookPageIndicator');
+  const flipProgress = document.getElementById('flipbookProgressFill');
+  let pageFlipInstance = null;
+
+  function initDesktopFlipbook() {
+    if (!flipbookContainer) return;
+
+    if (window.innerWidth < 1024) {
+      if (pageFlipInstance) {
+        try {
+          pageFlipInstance.destroy();
+        } catch (_) {}
+        pageFlipInstance = null;
+      }
+      return;
+    }
+
+    if (pageFlipInstance) return;
+
+    try {
+      const pageElements = flipbookContainer.querySelectorAll('.flip-page');
+      if (!pageElements.length) return;
+
+      pageFlipInstance = new PageFlip(flipbookContainer, {
+        width: 440,
+        height: 620,
+        size: 'stretch',
+        minWidth: 320,
+        maxWidth: 540,
+        minHeight: 450,
+        maxHeight: 760,
+        maxShadowOpacity: 0.4,
+        showCover: true,
+        drawShadow: true,
+        flippingTime: 750,
+        usePortrait: false,
+        startPage: 0,
+        autoSize: true,
+        disableFlipByClick: false
+      });
+
+      pageFlipInstance.loadFromHTML(pageElements);
+
+      const totalPages = pageElements.length;
+
+      const updateFlipUI = (pageIndex) => {
+        const displayPage = pageIndex + 1;
+        if (flipIndicator) {
+          flipIndicator.textContent = `Página ${displayPage} de ${totalPages}`;
+        }
+        if (flipProgress) {
+          const percent = Math.min(100, Math.max(16, (displayPage / totalPages) * 100));
+          flipProgress.style.width = `${percent}%`;
+        }
+        if (flipPrevBtn) {
+          flipPrevBtn.disabled = pageIndex === 0;
+        }
+        if (flipNextBtn) {
+          flipNextBtn.disabled = pageIndex >= totalPages - 1;
+        }
+      };
+
+      pageFlipInstance.on('flip', (e) => {
+        updateFlipUI(e.data);
+      });
+
+      pageFlipInstance.on('init', () => {
+        updateFlipUI(0);
+      });
+
+      if (flipPrevBtn) {
+        flipPrevBtn.onclick = () => {
+          if (pageFlipInstance) pageFlipInstance.flipPrev();
+        };
+      }
+
+      if (flipNextBtn) {
+        flipNextBtn.onclick = () => {
+          if (pageFlipInstance) pageFlipInstance.flipNext();
+        };
+      }
+
+      const wrapper = document.getElementById('flipbookWrapper');
+      if (wrapper) {
+        wrapper.addEventListener('keydown', (e) => {
+          if (!pageFlipInstance) return;
+          if (e.key === 'ArrowRight') {
+            pageFlipInstance.flipNext();
+          } else if (e.key === 'ArrowLeft') {
+            pageFlipInstance.flipPrev();
+          }
+        });
+      }
+
+      updateFlipUI(0);
+    } catch (err) {
+      console.warn('FlipBook notice:', err);
+    }
+  }
+
+  // Inicializar Flipbook tras carga o cambio de pantalla
+  if (typeof window !== 'undefined') {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(initDesktopFlipbook, 80);
+    } else {
+      window.addEventListener('DOMContentLoaded', () => setTimeout(initDesktopFlipbook, 80));
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(initDesktopFlipbook, 200);
+    }, { passive: true });
+  }
+
+  // Carrusel Galería (Móvil / Tablet < 1024px)
   const track = document.getElementById('carouselTrack');
   const prevBtn = document.getElementById('carouselPrev');
   const nextBtn = document.getElementById('carouselNext');

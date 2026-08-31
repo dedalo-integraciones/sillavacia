@@ -334,7 +334,7 @@
   </section>
 
   <!-- ============================================================
-       SECCIÓN 4 — GALERÍA
+       SECCIÓN 4 — GALERÍA (FLIPBOOK EN DESKTOP / CARRUSEL EN MOBILE)
   ============================================================ -->
   <section id="galeria" class="section galeria-section">
     <div class="container">
@@ -344,7 +344,104 @@
         <p class="section-sub">Una mirada íntima al espacio que construimos juntos.</p>
       </div>
 
-      <div class="carousel" data-aos="fade-up" data-aos-delay="150">
+      <!-- FLIPBOOK INTERACTIVO PARA ESCRITORIO -->
+      <div class="flipbook-wrapper" id="flipbookWrapper" data-aos="fade-up" data-aos-delay="150">
+        <div class="flipbook-stage">
+          <div id="flipbookContainer" class="flipbook-book">
+            <!-- Página 1: Portada (Hard Cover) -->
+            <div class="flip-page page-cover page-cover-front" data-density="hard">
+              <div class="page-inner">
+                <img src="src/assets/gallery/0.webp" alt="Portada de la galería de Silla Vacía" />
+                <div class="cover-overlay">
+                  <div class="cover-tag">Álbum Silla Vacía</div>
+                  <div class="cover-action-hint">
+                    <span>Hacé clic o arrastrá para hojear</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Página 2: Espacio 1 -->
+            <div class="flip-page page-interior" data-density="soft">
+              <div class="page-inner">
+                <img src="src/assets/gallery/1.webp" alt="Espacio terapéutico 1" />
+                <div class="page-foil"></div>
+                <div class="page-footer-num">01</div>
+              </div>
+            </div>
+
+            <!-- Página 3: Espacio 2 -->
+            <div class="flip-page page-interior" data-density="soft">
+              <div class="page-inner">
+                <img src="src/assets/gallery/2.webp" alt="Espacio terapéutico 2" />
+                <div class="page-foil"></div>
+                <div class="page-footer-num">02</div>
+              </div>
+            </div>
+
+            <!-- Página 4: Espacio 3 -->
+            <div class="flip-page page-interior" data-density="soft">
+              <div class="page-inner">
+                <img src="src/assets/gallery/3.webp" alt="Espacio terapéutico 3" />
+                <div class="page-foil"></div>
+                <div class="page-footer-num">03</div>
+              </div>
+            </div>
+
+            <!-- Página 5: Espacio 4 -->
+            <div class="flip-page page-interior" data-density="soft">
+              <div class="page-inner">
+                <img src="src/assets/gallery/4.webp" alt="Espacio terapéutico 4" />
+                <div class="page-foil"></div>
+                <div class="page-footer-num">04</div>
+              </div>
+            </div>
+
+            <!-- Página 6: Contraportada / Cierre (Hard Cover) -->
+            <div class="flip-page page-cover page-cover-back" data-density="hard">
+              <div class="page-inner back-cover-inner">
+                <div class="back-cover-decor">
+                  <div class="back-logo-wrap">
+                    <img src="public/logo-o.webp" alt="Silla Vacía" class="back-cover-logo" />
+                  </div>
+                  <h3 class="back-cover-title">Silla Vacía</h3>
+                  <p class="back-cover-quote">«Un espacio para volverte a encontrar»</p>
+                  <div class="back-cover-line"></div>
+                  <p class="back-cover-author">Acompañamiento Terapéutico<br><strong>Estelle Darcy</strong></p>
+                  <a href="https://wa.me/5492622666444" target="_blank" rel="noopener" class="btn btn-sm btn-primary back-cover-btn">
+                    Consultar por WhatsApp <span class="arrow">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controles del Flipbook -->
+        <div class="flipbook-controls">
+          <button class="flipbook-nav-btn prev" id="flipbookPrev" aria-label="Página anterior" title="Página anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            <span>Anterior</span>
+          </button>
+
+          <div class="flipbook-status">
+            <span class="flipbook-counter" id="flipbookPageIndicator">Página 1 de 6</span>
+            <div class="flipbook-progress-bar">
+              <div class="flipbook-progress-fill" id="flipbookProgressFill"></div>
+            </div>
+            <span class="flipbook-hint">Arrastrá desde las esquinas o usá las flechas del teclado</span>
+          </div>
+
+          <button class="flipbook-nav-btn next" id="flipbookNext" aria-label="Siguiente página" title="Siguiente página">
+            <span>Siguiente</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARRUSEL MÓVIL (únicamente para smartphones y tablets < 1024px) -->
+      <div class="carousel mobile-only" data-aos="fade-up" data-aos-delay="150">
         <div class="carousel-viewport">
           <div class="carousel-track" id="carouselTrack">
             <figure class="carousel-slide" data-index="0">
