@@ -1,25 +1,65 @@
 /* Silla Vacía · Script principal */
+import '@fontsource/dm-serif-display/400.css';
+import '@fontsource/dm-serif-display/400-italic.css';
+import '@fontsource/outfit/300.css';
+import '@fontsource/outfit/400.css';
+import '@fontsource/outfit/500.css';
+import '@fontsource/outfit/600.css';
+import '@fontsource/outfit/700.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 (function () {
   'use strict';
 
-  // Inicializar AOS
-  if (window.AOS) {
-    AOS.init({
-      duration: 900,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 80
+  // Inicializar AOS tras el primer render para evitar reflow forzado
+  const initAOS = () => {
+    if (typeof AOS !== 'undefined') {
+      AOS.init({
+        duration: 900,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 80,
+        disableMutationObserver: true,
+        debounceDelay: 50,
+        throttleDelay: 99
+      });
+    }
+  };
+
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(initAOS, { timeout: 300 });
+  } else {
+    window.requestAnimationFrame(() => {
+      setTimeout(initAOS, 50);
     });
   }
 
-  // Navbar scroll
+  // Navbar scroll optimizado con requestAnimationFrame
   const navbar = document.getElementById('navbar');
-  const onScroll = () => {
-    if (window.scrollY > 30) navbar.classList.add('scrolled');
-    else navbar.classList.remove('scrolled');
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  if (navbar) {
+    let ticking = false;
+    let isScrolled = false;
+
+    const updateNavbar = () => {
+      const scrolled = window.scrollY > 30;
+      if (scrolled !== isScrolled) {
+        isScrolled = scrolled;
+        navbar.classList.toggle('scrolled', isScrolled);
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNavbar);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.requestAnimationFrame(updateNavbar);
+  }
 
   // Menú mobile
   const toggle = document.getElementById('navToggle');
@@ -50,15 +90,17 @@
     const total = slides.length;
     let current = 0;
 
-    // Crear dots
+    // Crear dots por lotes usando DocumentFragment
+    const fragment = document.createDocumentFragment();
     slides.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
       dot.setAttribute('role', 'tab');
       dot.setAttribute('aria-label', 'Ir a imagen ' + (i + 1));
       dot.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(dot);
+      fragment.appendChild(dot);
     });
+    dotsWrap.appendChild(fragment);
 
     const dots = dotsWrap.querySelectorAll('.carousel-dot');
 
@@ -146,8 +188,9 @@
 
     if (allImages.length) {
       allImages.forEach((img, i) => {
-        img.parentElement.style.cursor = 'zoom-in';
-        img.parentElement.addEventListener('click', () => openModal(i));
+        if (img && img.parentElement) {
+          img.parentElement.addEventListener('click', () => openModal(i));
+        }
       });
     }
 
@@ -161,9 +204,9 @@
       if (!modal.classList.contains('open')) return;
       if (e.key === 'Escape') closeModal();
       if (e.key === 'ArrowRight') modalNextImg();
-       if (e.key === 'ArrowLeft') modalPrevImg();
-     });
-   }
+      if (e.key === 'ArrowLeft') modalPrevImg();
+    });
+  }
 
   // Background image cycling in Hero
   const heroBg = document.getElementById('heroBg');
